@@ -1,0 +1,93 @@
+services:
+  reverse-proxy:
+    image: caddy:2.8-alpine
+    restart: unless-stopped
+    depends_on:
+      java-service:
+        condition: service_healthy
+    environment:
+      SHOWROOM_HOST: ${SHOWROOM_HOST:-localhost}
+    ports:
+      - "${SHOWROOM_HTTP_PORT:-80}:80"
+      - "${SHOWROOM_HTTPS_PORT:-443}:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./deploy/certs:/certs:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+  java-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: "8080"
+      DOD_WORKER_BASE_URL: "http://inference-worker:8001"
+      DOD_WORKER_TIMEOUT: ${DOD_WORKER_TIMEOUT:-10s}
+      DOD_WORKER_FRAME_HOST: "inference-worker"
+      DOD_WORKER_FRAME_PORT: "8002"
+      DOD_CHARACTERS_DIR: "/app/characters"
+      DOD_DEFAULT_CHARACTER_ID: ${DOD_DEFAULT_CHARACTER_ID:-default-human}
+      DOD_WS_ALLOWED_ORIGINS: ${DOD_WS_ALLOWED_ORIGINS:-*}
+    expose:
+      - "8080"
+    volumes:
+      - ./characters:/app/characters:ro
+      - ./logs/java:/app/logs
+    depends_on:
+      inference-worker:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/actuator/health | grep -q '\"status\":\"UP\"'"]
+      interval: 10s
+      timeout: 3s
+      retries: 30
+      start_period: 20s
+
+  inference-worker:
+    build:
+      context: .
+      dockerfile: inference-worker/Dockerfile.deep-live-cam
+    restart: unless-stopped
+    environment:
+      DOD_INFERENCE_MODE: "deep_live_cam"
+      DOD_DEEP_LIVE_CAM_DIR: "/app/deep-live-cam"
+      DOD_MODEL_DIR: "/app/models/deeplivecam"
+      DOD_CHARACTERS_DIR: "/app/characters"
+      DOD_CHARACTER_IDS: ${DOD_CHARACTER_IDS:-default-human,west,snoop-dogg,trump,kim-jong-un,boris-johnson}
+      DOD_DEFAULT_CHARACTER_ID: ${DOD_DEFAULT_CHARACTER_ID:-default-human}
+      DOD_WORKER_TEMP_DIR: "/tmp/dod-worker"
+      DOD_WORKER_FRAME_PORT: "8002"
+      DOD_FACE_SWITCH_AREA_RATIO: ${DOD_FACE_SWITCH_AREA_RATIO:-1.25}
+      DOD_FACE_SWITCH_HOLD_MS: ${DOD_FACE_SWITCH_HOLD_MS:-500}
+      DOD_FACE_LOST_HOLD_MS: ${DOD_FACE_LOST_HOLD_MS:-300}
+      DOD_EXECUTION_PROVIDERS: ${DOD_EXECUTION_PROVIDERS:-cuda,cpu}
+      DOD_EXECUTION_THREADS: ${DOD_EXECUTION_THREADS:-1}
+      DOD_DISABLE_CUDA_GRAPH: ${DOD_DISABLE_CUDA_GRAPH:-true}
+      DOD_CUDA_GPU_MEM_LIMIT_MB: ${DOD_CUDA_GPU_MEM_LIMIT_MB:-12288}
+      DOD_POISSON_BLEND: ${DOD_POISSON_BLEND:-false}
+      DOD_COLOR_CORRECTION: ${DOD_COLOR_CORRECTION:-false}
+      DOD_MOUTH_MASK_SIZE: ${DOD_MOUTH_MASK_SIZE:-0}
+      DOD_SHARPNESS: ${DOD_SHARPNESS:-0}
+      DOD_OPACITY: ${DOD_OPACITY:-1.0}
+      DOD_FACE_ENHANCER: ${DOD_FACE_ENHANCER:-none}
+    expose:
+      - "8001"
+      - "8002"
+    gpus: all
+    volumes:
+      - ./characters:/app/characters:ro
+      - ./experiments/Deep-Live-Cam/models:/app/models/deeplivecam:ro
+      - ./logs/worker:/app/logs
+      - ./deploy/cache:/app/cache
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import json, urllib.request; h=json.load(urllib.request.urlopen('http://localhost:8001/health', timeout=2)); raise SystemExit(0 if h.get('ready') is True else 1)\""]
+      interval: 10s
+      timeout: 3s
+      retries: 60
+      start_period: 60s
+
+volumes:
+  caddy_data:
+  caddy_config:

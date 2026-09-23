@@ -1,0 +1,16 @@
+[Unit]
+Description=DOD Deep Live Cam showroom service
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/dod-deep-live-cam
+RemainAfterExit=yes
+ExecStart=/usr/bin/docker compose --env-file deploy/showroom.env -f docker-compose.showroom.yml up -d --build
+ExecStop=/usr/bin/docker compose --env-file deploy/showroom.env -f docker-compose.showroom.yml down
+TimeoutStartSec=0
+
+[Install]
+WantedBy=multi-user.target

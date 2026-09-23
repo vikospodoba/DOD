@@ -1,0 +1,40 @@
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV HOME=/app/cache
+ENV DOD_DEEP_LIVE_CAM_DIR=/app/deep-live-cam
+
+WORKDIR /app
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        curl \
+        ffmpeg \
+        libgl1 \
+        libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY inference-worker/requirements.txt /tmp/inference-worker-requirements.txt
+COPY experiments/Deep-Live-Cam/requirements.txt /tmp/deep-live-cam-requirements.txt
+
+RUN pip install --no-cache-dir -r /tmp/inference-worker-requirements.txt \
+    && pip install --no-cache-dir \
+        nvidia-cublas-cu12 \
+        nvidia-cuda-runtime-cu12 \
+        nvidia-cudnn-cu12 \
+        nvidia-cufft-cu12 \
+        nvidia-curand-cu12 \
+        nvidia-cusolver-cu12 \
+        nvidia-cusparse-cu12 \
+    && pip install --no-cache-dir -r /tmp/deep-live-cam-requirements.txt
+
+COPY inference-worker/main.py /app/main.py
+COPY inference-worker/processor.py /app/processor.py
+COPY experiments/Deep-Live-Cam/modules /app/deep-live-cam/modules
+COPY experiments/Deep-Live-Cam/run.py /app/deep-live-cam/run.py
+
+RUN mkdir -p /app/cache /app/logs /tmp/dod-worker
+
+EXPOSE 8001
+CMD ["python", "main.py"]

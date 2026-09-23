@@ -1,0 +1,13 @@
+{
+    auto_https disable_redirects
+}
+
+http://{$SHOWROOM_HOST} {
+    redir https://{$SHOWROOM_HOST}{uri}
+}
+
+https://{$SHOWROOM_HOST} {
+    tls /certs/fullchain.pem /certs/privkey.pem
+    encode zstd gzip
+    reverse_proxy java-service:8080
+}

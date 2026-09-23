@@ -1,0 +1,9 @@
+target
+.venv
+.idea
+.git
+**/.git
+**/__pycache__
+logs
+models
+TZ_prototip_zameny_golovy_DOD_MIREA.docx

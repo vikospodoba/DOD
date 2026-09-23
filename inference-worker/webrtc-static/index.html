@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DOD WebRTC Face Swap</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <main class="app">
+        <header class="toolbar">
+            <div class="brand">DOD WebRTC</div>
+            <label class="field">
+                <span>Персонаж</span>
+                <select id="characterSelect"></select>
+            </label>
+            <label class="toggle">
+                <input id="manyFacesToggle" type="checkbox">
+                <span>Many faces</span>
+            </label>
+            <button id="startButton" type="button">Запустить</button>
+            <button id="stopButton" type="button" disabled>Остановить</button>
+            <div id="status" class="status">Ожидание</div>
+            <div class="metric"><span id="fps">0</span> FPS</div>
+        </header>
+
+        <section class="stage">
+            <video id="localVideo" class="hidden-video" autoplay muted playsinline></video>
+            <div class="video-pane">
+                <div class="pane-title">Live</div>
+                <video id="remoteVideo" autoplay playsinline></video>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/client.js?v=20260921-fps2"></script>
+</body>
+</html>

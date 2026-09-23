@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DOD Deep Live Cam</title>
+    <link rel="stylesheet" href="/styles.css?v=20260923-contain">
+</head>
+<body>
+<main class="live-shell">
+    <section class="stage" aria-label="Live camera">
+        <video id="sourceVideo" class="mirror media-layer" playsinline muted></video>
+        <canvas id="processedCanvas" class="mirror media-layer processed"></canvas>
+        <canvas id="captureCanvas" class="hidden"></canvas>
+
+        <div class="status-strip" aria-label="Status">
+            <span id="cameraStatus" class="status-pill muted">Камера выключена</span>
+            <span id="workerStatus" class="status-pill muted">Движок: проверка</span>
+            <span class="status-pill metric"><span id="fpsMetric">0</span> FPS</span>
+            <span class="status-pill metric"><span id="latencyMetric">0</span> ms avg</span>
+            <span class="status-pill metric"><span id="inferenceMetric">0</span> ML ms</span>
+        </div>
+
+        <button id="cameraButton" class="live-button" type="button">Запустить</button>
+
+        <div id="message" class="message hidden"></div>
+    </section>
+
+    <aside class="face-panel" aria-label="Source face">
+        <div>
+            <p class="eyebrow">Источник</p>
+            <h1>Выберите лицо</h1>
+        </div>
+        <div id="charactersContainer" class="characters" role="group" aria-label="Face selection"></div>
+        <label class="toggle-row">
+            <input id="manyFacesToggle" type="checkbox">
+            <span class="toggle-track" aria-hidden="true"></span>
+            <span>
+                <strong>Many faces</strong>
+                <small>Заменять все найденные лица</small>
+            </span>
+        </label>
+    </aside>
+</main>
+<script src="/app.js?v=20260922-no-zoom"></script>
+</body>
+</html>

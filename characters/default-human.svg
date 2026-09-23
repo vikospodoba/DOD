@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Human test character">
+  <rect width="256" height="256" fill="#20252e"/>
+  <circle cx="128" cy="118" r="70" fill="#d89b72"/>
+  <path d="M62 101c10-52 43-73 84-67 34 5 54 31 51 74-38-21-82-23-135-7z" fill="#30343d"/>
+  <circle cx="102" cy="124" r="9" fill="#1b1d22"/>
+  <circle cx="154" cy="124" r="9" fill="#1b1d22"/>
+  <path d="M99 160c19 15 39 15 58 0" fill="none" stroke="#7f3c35" stroke-width="10" stroke-linecap="round"/>
+  <path d="M78 229c8-33 27-51 50-51s42 18 50 51" fill="#4b8fd8"/>
+</svg>

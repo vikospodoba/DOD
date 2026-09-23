@@ -1,0 +1,38 @@
+[
+  {
+    "id": "default-human",
+    "name": "Базовое лицо",
+    "type": "source face",
+    "imageUrl": "/characters/default-human.jpg"
+  },
+  {
+    "id": "west",
+    "name": "Канье Вест",
+    "type": "source face",
+    "imageUrl": "/characters/west.jpg"
+  },
+  {
+    "id": "snoop-dogg",
+    "name": "Снуп Догг",
+    "type": "source face",
+    "imageUrl": "/characters/snoop-dogg.jpg"
+  },
+  {
+    "id": "trump",
+    "name": "Дональд Трамп",
+    "type": "source face",
+    "imageUrl": "/characters/trump.jpg"
+  },
+  {
+    "id": "kim-jong-un",
+    "name": "Ким Чен Ын",
+    "type": "source face",
+    "imageUrl": "/characters/kim-jong-un.jpg"
+  },
+  {
+    "id": "boris-johnson",
+    "name": "Борис Джонсон",
+    "type": "source face",
+    "imageUrl": "/characters/boris-johnson.jpg?v=20260909"
+  }
+]

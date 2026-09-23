@@ -1,0 +1,62 @@
+services:
+  java-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SERVER_PORT: "8080"
+      DOD_WORKER_BASE_URL: "http://inference-worker:8001"
+      DOD_WORKER_TIMEOUT: "10s"
+      DOD_WORKER_FRAME_HOST: "inference-worker"
+      DOD_WORKER_FRAME_PORT: "8002"
+      DOD_CHARACTERS_DIR: "/app/characters"
+      DOD_DEFAULT_CHARACTER_ID: "default-human"
+    ports:
+      - "8082:8080"
+    volumes:
+      - ./characters:/app/characters:ro
+      - ./logs/java:/app/logs
+    depends_on:
+      inference-worker:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  inference-worker:
+    build:
+      context: ./inference-worker
+      dockerfile: Dockerfile
+    environment:
+      DOD_MODEL_DIR: "/app/models/deeplivecam"
+      DOD_CHARACTERS_DIR: "/app/characters"
+      DOD_CHARACTER_IDS: "default-human,west,snoop-dogg,trump,kim-jong-un,boris-johnson"
+      DOD_DEFAULT_CHARACTER_ID: "default-human"
+      DOD_INFERENCE_MODE: "stub"
+      DOD_WORKER_TEMP_DIR: "/tmp/dod-worker"
+      DOD_WORKER_FRAME_PORT: "8002"
+      DOD_FACE_SWITCH_AREA_RATIO: "1.25"
+      DOD_FACE_SWITCH_HOLD_MS: "500"
+      DOD_FACE_LOST_HOLD_MS: "300"
+      DOD_POISSON_BLEND: "false"
+      DOD_COLOR_CORRECTION: "false"
+      DOD_MOUTH_MASK_SIZE: "0"
+      DOD_SHARPNESS: "0"
+      DOD_OPACITY: "1.0"
+      DOD_FACE_ENHANCER: "none"
+    expose:
+      - "8001"
+      - "8002"
+    volumes:
+      - ./characters:/app/characters:ro
+      - ./models:/app/models:ro
+      - ./logs/worker:/app/logs
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8001/health', timeout=2).read()\""]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
