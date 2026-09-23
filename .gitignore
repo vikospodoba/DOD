@@ -1,7 +1,7 @@
 target/
 .venv/
 logs/
-models/
+/models/
 experiments/**/.git/
 experiments/**/.venv/
 experiments/**/.venv*/
