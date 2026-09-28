@@ -161,14 +161,14 @@ button:focus-visible {
     left: 50%;
     bottom: 22px;
     z-index: 2;
-    min-width: 164px;
-    min-height: 48px;
-    padding: 0 22px;
+    width: min(640px, calc(100% - 48px));
+    min-height: 112px;
+    padding: 0 48px;
     transform: translateX(-50%);
     border-color: rgba(255, 255, 255, 0.24);
     background: rgba(10, 16, 24, 0.76);
     color: #ffffff;
-    font-size: 16px;
+    font-size: 32px;
     font-weight: 750;
     box-shadow: 0 14px 34px rgba(0, 0, 0, 0.34);
     backdrop-filter: blur(12px);
@@ -422,9 +422,10 @@ h1 {
 
     .live-button {
         bottom: 16px;
-        min-width: 152px;
-        min-height: 46px;
-        font-size: 15px;
+        width: calc(100% - 32px);
+        min-height: 96px;
+        padding: 0 24px;
+        font-size: 28px;
     }
 
     .message {
