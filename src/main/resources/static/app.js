@@ -25,9 +25,9 @@ const cameraProfiles = [
     { width: 1280, height: 720 }
 ];
 const processingProfiles = {
-    "720p": { width: 1280, height: 720, jpegQuality: 0.84 }
+    "540p": { width: 960, height: 540, jpegQuality: 0.76 }
 };
-const defaultProcessingProfileId = "720p";
+const defaultProcessingProfileId = "540p";
 const socketReconnectDelayMs = 1000;
 const hiddenCharacterIds = new Set(["default-human"]);
 const metricWindowSize = 30;
