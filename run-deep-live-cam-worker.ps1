@@ -28,7 +28,7 @@ $env:DOD_INFERENCE_MODE = "deep_live_cam"
 $env:DOD_DEEP_LIVE_CAM_DIR = $deepLiveCamRoot
 $env:DOD_MODEL_DIR = $modelDir
 $env:DOD_CHARACTERS_DIR = Join-Path $root "characters"
-$env:DOD_CHARACTER_IDS = "default-human,west,snoop-dogg,trump,kim-jong-un,boris-johnson"
+$env:DOD_CHARACTER_IDS = "default-human,west,snoop-dogg,trump,kim-jong-un,boris-johnson,izulina,kirkorov"
 $env:DOD_DEFAULT_CHARACTER_ID = "default-human"
 if (-not $env:DOD_EXECUTION_PROVIDERS) {
     $env:DOD_EXECUTION_PROVIDERS = "cuda,cpu"

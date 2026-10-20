@@ -34,5 +34,17 @@
     "name": "Борис Джонсон",
     "type": "source face",
     "imageUrl": "/characters/boris-johnson.jpg?v=20260909"
+  },
+  {
+    "id": "izulina",
+    "name": "Екатерина Мизулина",
+    "type": "source face",
+    "imageUrl": "/characters/izulina.jpg"
+  },
+  {
+    "id": "kirkorov",
+    "name": "Филипп Киркоров",
+    "type": "source face",
+    "imageUrl": "/characters/kirkorov.jpg"
   }
 ]
